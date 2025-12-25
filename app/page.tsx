@@ -1,65 +1,115 @@
-import Image from "next/image";
+import Link from "next/link";
+import { FileText, WifiOff, Users, Cloud, Mail } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="min-h-screen">
+      <div className="max-w-4xl mx-auto px-6 py-16">
+        <header className="text-center mb-16">
+          <h1 className="text-5xl font-bold tracking-tight mb-4">Gongpo</h1>
+          <p className="text-xl text-muted-foreground mb-2">
+            Your ideas, always with you
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+          <p className="text-base text-muted-foreground max-w-2xl mx-auto">
+            A local-first note-taking app that keeps your documents safe on your
+            device while enabling seamless collaboration with others.
+          </p>
+        </header>
+
+        <section className="mb-16">
+          <h2 className="text-2xl font-semibold mb-8 text-center">Features</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <FeatureCard
+              icon={<FileText className="w-6 h-6" />}
+              title="Rich Text Editor"
+              description="Create and organize your notes with a powerful rich text editor."
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+            <FeatureCard
+              icon={<WifiOff className="w-6 h-6" />}
+              title="Work Offline"
+              description="Work offline without worry — your data stays on your device and syncs when you're ready."
+            />
+            <FeatureCard
+              icon={<Users className="w-6 h-6" />}
+              title="Real-time Collaboration"
+              description="Collaborate in real time by inviting teammates to your workspace. See changes as they happen."
+            />
+            <FeatureCard
+              icon={<Cloud className="w-6 h-6" />}
+              title="Cloud Sync"
+              description="Sync across all your devices with cloud backup, so your notes are always accessible."
+            />
+          </div>
+        </section>
+
+        <section className="text-center mb-16 py-12 bg-card/50 rounded-2xl border">
+          <h2 className="text-2xl font-semibold mb-4">
+            Your Workspace, Your Way
+          </h2>
+          <p className="text-muted-foreground mb-8 max-w-lg mx-auto">
+            Your notes, your workspace, your way — Experience it all with
+            Gongpo.
+          </p>
+          <div className="flex justify-center gap-4">
+            <span className="inline-flex items-center gap-2 bg-muted text-muted-foreground px-6 py-3 rounded-lg font-medium cursor-default">
+              Coming Soon
+            </span>
+          </div>
+        </section>
+
+        <section className="mb-16">
+          <h2 className="text-2xl font-semibold mb-6 text-center">Legal</h2>
+          <div className="flex justify-center gap-8">
+            <Link
+              href="/terms"
+              className="text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4"
+            >
+              Terms of Use
+            </Link>
+            <Link
+              href="/privacy"
+              className="text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4"
+            >
+              Privacy Policy
+            </Link>
+          </div>
+        </section>
+
+        <footer className="border-t pt-8">
+          <div className="text-center">
+            <h3 className="font-semibold mb-2">Developer & Contact</h3>
+            <p className="text-muted-foreground mb-4">Developer: Jaeha Lee</p>
+            <a
+              href="mailto:gongpoapp@gmail.com"
+              className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <Mail className="w-4 h-4" />
+              gongpoapp@gmail.com
+            </a>
+            <p className="text-sm text-muted-foreground mt-4">
+              Please send your inquiries by email. Welcome any feedback!
+            </p>
+          </div>
+        </footer>
+      </div>
+    </main>
+  );
+}
+
+function FeatureCard({
+  icon,
+  title,
+  description,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="p-6 bg-card/50 rounded-xl border hover:border-foreground/20 transition-colors">
+      <div className="mb-4 text-primary">{icon}</div>
+      <h3 className="font-semibold mb-2">{title}</h3>
+      <p className="text-sm text-muted-foreground">{description}</p>
     </div>
   );
 }
