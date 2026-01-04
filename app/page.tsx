@@ -51,9 +51,12 @@ export default function Home() {
             Gongpo.
           </p>
           <div className="flex justify-center gap-4">
-            <span className="inline-flex items-center gap-2 bg-muted text-muted-foreground px-6 py-3 rounded-lg font-medium cursor-default">
-              Coming Soon
-            </span>
+            <Link
+              href="/download"
+              className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
+            >
+              Download Now
+            </Link>
           </div>
         </section>
 
