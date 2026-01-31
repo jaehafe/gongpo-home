@@ -99,9 +99,9 @@ function detectPlatform(): Platform {
 
   if (platform.includes('mac') || userAgent.includes('mac')) {
     // Check for Apple Silicon
-    // @ts-expect-error - userAgentData is not yet in TypeScript types
     const isArmMac =
-      navigator.userAgentData?.platform === 'macOS'
+      (navigator as Navigator & { userAgentData?: { platform: string } })
+        .userAgentData?.platform === 'macOS'
         ? true
         : /arm|aarch64/.test(userAgent) ||
           (platform === 'macintel' && navigator.maxTouchPoints > 0);
@@ -129,6 +129,8 @@ export default function DownloadPage() {
   const [showAllPlatforms, setShowAllPlatforms] = useState(false);
 
   useEffect(() => {
+    // Platform detection must run on client side
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDetectedPlatform(detectPlatform());
   }, []);
 
