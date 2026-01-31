@@ -1,11 +1,22 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { Download, Apple, Monitor, ChevronDown, Smartphone } from "lucide-react";
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import {
+  Download,
+  Apple,
+  Monitor,
+  ChevronDown,
+  Smartphone,
+} from 'lucide-react';
 
-type DesktopPlatform = "mac-arm" | "mac-intel" | "windows" | "linux" | "unknown";
-type MobilePlatform = "ios" | "android";
+type DesktopPlatform =
+  | 'mac-arm'
+  | 'mac-intel'
+  | 'windows'
+  | 'linux'
+  | 'unknown';
+type MobilePlatform = 'ios' | 'android';
 type Platform = DesktopPlatform | MobilePlatform;
 
 interface DownloadInfo {
@@ -16,121 +27,127 @@ interface DownloadInfo {
   description: string;
 }
 
-const GITHUB_REPO = "jaehafe/gongpo-home";
-const VERSION = "0.1.0";
+const R2_DOWNLOAD_URL = 'https://download.gongpo.me';
+const VERSION = '0.1.0';
 
 const MOBILE_APPS = {
   ios: {
-    url: "https://apps.apple.com/us/app/gongpo/id6754605109",
-    label: "App Store",
+    url: 'https://apps.apple.com/us/app/gongpo/id6754605109',
+    label: 'App Store',
     icon: <Apple className="w-5 h-5" />,
   },
   android: {
-    url: "https://play.google.com/store/apps/details?id=com.jaeha.gongpo",
-    label: "Google Play",
+    url: 'https://play.google.com/store/apps/details?id=com.jaeha.gongpo',
+    label: 'Google Play',
     icon: <Smartphone className="w-5 h-5" />,
   },
 };
 
 const downloadOptions: Record<DesktopPlatform, DownloadInfo> = {
-  "mac-arm": {
-    platform: "mac-arm",
-    label: "Download for macOS",
+  'mac-arm': {
+    platform: 'mac-arm',
+    label: 'Download for macOS',
     icon: <Apple className="w-5 h-5" />,
     fileName: `Gongpo-${VERSION}-arm64.dmg`,
-    description: "Apple Silicon (M1/M2/M3)",
+    description: 'Apple Silicon (M1/M2/M3)',
   },
-  "mac-intel": {
-    platform: "mac-intel",
-    label: "Download for macOS",
+  'mac-intel': {
+    platform: 'mac-intel',
+    label: 'Download for macOS',
     icon: <Apple className="w-5 h-5" />,
     fileName: `Gongpo-${VERSION}-x64.dmg`,
-    description: "Intel Processor",
+    description: 'Intel Processor',
   },
   windows: {
-    platform: "windows",
-    label: "Download for Windows",
+    platform: 'windows',
+    label: 'Download for Windows',
     icon: <Monitor className="w-5 h-5" />,
     fileName: `Gongpo-${VERSION}-Setup.exe`,
-    description: "Windows 10/11 (64-bit)",
+    description: 'Windows 10/11 (64-bit)',
   },
   linux: {
-    platform: "linux",
-    label: "Download for Linux",
+    platform: 'linux',
+    label: 'Download for Linux',
     icon: <Monitor className="w-5 h-5" />,
     fileName: `Gongpo-${VERSION}-amd64.deb`,
-    description: "Debian/Ubuntu (.deb)",
+    description: 'Debian/Ubuntu (.deb)',
   },
   unknown: {
-    platform: "unknown",
-    label: "Download",
+    platform: 'unknown',
+    label: 'Download',
     icon: <Download className="w-5 h-5" />,
-    fileName: "",
-    description: "Select your platform",
+    fileName: '',
+    description: 'Select your platform',
   },
 };
 
 function detectPlatform(): Platform {
-  if (typeof window === "undefined") return "unknown";
+  if (typeof window === 'undefined') return 'unknown';
 
   const userAgent = navigator.userAgent.toLowerCase();
   const platform = navigator.platform.toLowerCase();
 
   // iOS detection
   if (/iphone|ipad|ipod/.test(userAgent)) {
-    return "ios";
+    return 'ios';
   }
 
   // Android detection
   if (/android/.test(userAgent)) {
-    return "android";
+    return 'android';
   }
 
-  if (platform.includes("mac") || userAgent.includes("mac")) {
+  if (platform.includes('mac') || userAgent.includes('mac')) {
     // Check for Apple Silicon
     // @ts-expect-error - userAgentData is not yet in TypeScript types
-    const isArmMac = navigator.userAgentData?.platform === "macOS"
-      ? true
-      : /arm|aarch64/.test(userAgent) ||
-        (platform === "macintel" && navigator.maxTouchPoints > 0);
+    const isArmMac =
+      navigator.userAgentData?.platform === 'macOS'
+        ? true
+        : /arm|aarch64/.test(userAgent) ||
+          (platform === 'macintel' && navigator.maxTouchPoints > 0);
 
-    return isArmMac ? "mac-arm" : "mac-intel";
+    return isArmMac ? 'mac-arm' : 'mac-intel';
   }
 
-  if (platform.includes("win") || userAgent.includes("windows")) {
-    return "windows";
+  if (platform.includes('win') || userAgent.includes('windows')) {
+    return 'windows';
   }
 
-  if (platform.includes("linux") || userAgent.includes("linux")) {
-    return "linux";
+  if (platform.includes('linux') || userAgent.includes('linux')) {
+    return 'linux';
   }
 
-  return "unknown";
+  return 'unknown';
 }
 
 function getDownloadUrl(fileName: string): string {
-  return `https://github.com/${GITHUB_REPO}/releases/latest/download/${fileName}`;
+  return `${R2_DOWNLOAD_URL}/releases/v${VERSION}/${fileName}`;
 }
 
 export default function DownloadPage() {
-  const [detectedPlatform, setDetectedPlatform] = useState<Platform>("unknown");
+  const [detectedPlatform, setDetectedPlatform] = useState<Platform>('unknown');
   const [showAllPlatforms, setShowAllPlatforms] = useState(false);
 
   useEffect(() => {
     setDetectedPlatform(detectPlatform());
   }, []);
 
-  const isMobile = detectedPlatform === "ios" || detectedPlatform === "android";
-  const primaryDownload = isMobile ? downloadOptions["unknown"] : downloadOptions[detectedPlatform as DesktopPlatform];
+  const isMobile = detectedPlatform === 'ios' || detectedPlatform === 'android';
+  const primaryDownload = isMobile
+    ? downloadOptions['unknown']
+    : downloadOptions[detectedPlatform as DesktopPlatform];
   const desktopPlatforms = Object.values(downloadOptions).filter(
-    (opt) => opt.platform !== "unknown"
+    (opt) => opt.platform !== 'unknown',
   );
 
   return (
     <main className="min-h-screen">
       <div className="max-w-4xl mx-auto px-6 py-16">
         <header className="text-center mb-12">
-          <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors mb-8 inline-block">
+          <Link
+            href="/"
+            className="text-muted-foreground hover:text-foreground transition-colors mb-8 inline-block"
+          >
             ← Back to Home
           </Link>
           <h1 className="text-5xl font-bold tracking-tight mb-4">
@@ -147,25 +164,41 @@ export default function DownloadPage() {
             <div className="bg-card/80 backdrop-blur border rounded-2xl p-8 text-center">
               <h2 className="text-2xl font-semibold mb-6">Get the App</h2>
               <a
-                href={detectedPlatform === "ios" ? MOBILE_APPS.ios.url : MOBILE_APPS.android.url}
+                href={
+                  detectedPlatform === 'ios'
+                    ? MOBILE_APPS.ios.url
+                    : MOBILE_APPS.android.url
+                }
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-3 bg-primary text-primary-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:bg-primary/90 transition-colors"
               >
-                {detectedPlatform === "ios" ? MOBILE_APPS.ios.icon : MOBILE_APPS.android.icon}
-                {detectedPlatform === "ios" ? "Download on App Store" : "Get it on Google Play"}
+                {detectedPlatform === 'ios'
+                  ? MOBILE_APPS.ios.icon
+                  : MOBILE_APPS.android.icon}
+                {detectedPlatform === 'ios'
+                  ? 'Download on App Store'
+                  : 'Get it on Google Play'}
               </a>
               <div className="mt-6 pt-6 border-t">
-                <p className="text-sm text-muted-foreground mb-4">Also available on</p>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Also available on
+                </p>
                 <a
-                  href={detectedPlatform === "ios" ? MOBILE_APPS.android.url : MOBILE_APPS.ios.url}
+                  href={
+                    detectedPlatform === 'ios'
+                      ? MOBILE_APPS.android.url
+                      : MOBILE_APPS.ios.url
+                  }
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border hover:bg-muted/50 transition-colors"
                 >
-                  {detectedPlatform === "ios" ? MOBILE_APPS.android.icon : MOBILE_APPS.ios.icon}
+                  {detectedPlatform === 'ios'
+                    ? MOBILE_APPS.android.icon
+                    : MOBILE_APPS.ios.icon}
                   <span className="text-sm">
-                    {detectedPlatform === "ios" ? "Google Play" : "App Store"}
+                    {detectedPlatform === 'ios' ? 'Google Play' : 'App Store'}
                   </span>
                 </a>
               </div>
@@ -182,7 +215,7 @@ export default function DownloadPage() {
               </span>
             </div>
 
-            {!isMobile && detectedPlatform !== "unknown" ? (
+            {!isMobile && detectedPlatform !== 'unknown' ? (
               <>
                 <a
                   href={getDownloadUrl(primaryDownload.fileName)}
@@ -203,12 +236,12 @@ export default function DownloadPage() {
 
             <button
               onClick={() => setShowAllPlatforms(!showAllPlatforms)}
-              className={`${isMobile ? "" : "mt-6"} inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm`}
+              className={`${isMobile ? '' : 'mt-6'} inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm`}
             >
-              {isMobile ? "Desktop downloads" : "Other platforms"}
+              {isMobile ? 'Desktop downloads' : 'Other platforms'}
               <ChevronDown
                 className={`w-4 h-4 transition-transform ${
-                  showAllPlatforms ? "rotate-180" : ""
+                  showAllPlatforms ? 'rotate-180' : ''
                 }`}
               />
             </button>
@@ -223,10 +256,10 @@ export default function DownloadPage() {
                   >
                     {option.icon}
                     <span className="font-medium text-sm">
-                      {option.platform === "mac-arm" && "macOS (Apple Silicon)"}
-                      {option.platform === "mac-intel" && "macOS (Intel)"}
-                      {option.platform === "windows" && "Windows"}
-                      {option.platform === "linux" && "Linux"}
+                      {option.platform === 'mac-arm' && 'macOS (Apple Silicon)'}
+                      {option.platform === 'mac-intel' && 'macOS (Intel)'}
+                      {option.platform === 'windows' && 'Windows'}
+                      {option.platform === 'linux' && 'Linux'}
                     </span>
                     <span className="text-xs text-muted-foreground">
                       {option.fileName}
@@ -255,7 +288,9 @@ export default function DownloadPage() {
                   {MOBILE_APPS.ios.icon}
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground">Download on the</p>
+                  <p className="text-xs text-muted-foreground">
+                    Download on the
+                  </p>
                   <p className="font-semibold text-lg">App Store</p>
                 </div>
               </a>
@@ -319,24 +354,16 @@ export default function DownloadPage() {
         </section>
 
         <section className="text-center">
-          <p className="text-sm text-muted-foreground mb-4">
-            By downloading, you agree to our{" "}
+          <p className="text-sm text-muted-foreground">
+            By downloading, you agree to our{' '}
             <Link href="/terms" className="underline hover:text-foreground">
               Terms of Use
-            </Link>{" "}
-            and{" "}
+            </Link>{' '}
+            and{' '}
             <Link href="/privacy" className="underline hover:text-foreground">
               Privacy Policy
             </Link>
           </p>
-          <a
-            href={`https://github.com/${GITHUB_REPO}/releases`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-muted-foreground hover:text-foreground underline"
-          >
-            View all releases on GitHub →
-          </a>
         </section>
       </div>
     </main>
