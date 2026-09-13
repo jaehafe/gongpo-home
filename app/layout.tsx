@@ -13,6 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  // opengraph-image.png 을 절대 URL 로 내보내려면 필요하다. 없으면 빌드 환경의
+  // localhost 주소가 og:image 에 박혀서 링크 공유 카드가 깨진다.
+  metadataBase: new URL("https://gongpo.me"),
   title: "Gongpo - Your ideas, always with you",
   description:
     "A local-first note-taking app that keeps your documents safe on your device while enabling seamless collaboration with others.",
@@ -25,6 +28,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "Gongpo",
+  },
+  twitter: {
+    card: "summary_large_image",
   },
 };
 
